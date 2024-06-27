@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "uart.h": "c",
+        "misc.h": "c",
+        "backlight.h": "c",
+        "fm.h": "c",
+        "battery.h": "c",
+        "system.h": "c",
+        "bk1080.h": "c",
+        "gpio.h": "c",
+        "stdint.h": "c",
+        "app.h": "c",
+        "stdbool.h": "c"
+    }
+}

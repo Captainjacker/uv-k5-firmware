@@ -24,6 +24,7 @@
 #include "ui/helper.h"
 #include "ui/inputbox.h"
 #include "ui/ui.h"
+#include "driver/bk1080.h"
 
 void UI_DisplayFM(void)
 {
@@ -78,6 +79,9 @@ void UI_DisplayFM(void)
 		} else {
 			UI_DisplayFrequency(gInputBox, 23, 4, true, false);
 		}
+
+		//UI_RSSI_FM();
+
 		ST7565_BlitFullScreen();
 		return;
 	} else {
@@ -88,3 +92,23 @@ void UI_DisplayFM(void)
 	ST7565_BlitFullScreen();
 }
 
+void UI_RSSI_FM(void)
+{	
+	char String[16];
+
+	memset(String, 0, sizeof(String));
+
+	#if 0
+		NUMBER_ToDigits(BK1080_GetRSSI() * 100000, String);
+		UI_DisplaySmallDigits(3, String, 2, 0);
+
+		strcpy(String, "RSSI");
+		UI_DisplaySmall(4, String, 1, 1);
+	#else
+		NUMBER_ToDigits(BK1080_GetRSSI() * 100000, String);
+		DrawLine(2, 0, 3, String, true);
+
+		strcpy(String, "RSSI");
+		DrawLine(1, 1, 4, String, false);
+	#endif	
+}

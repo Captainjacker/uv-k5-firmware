@@ -131,3 +131,31 @@ void UI_DisplaySmallDigits(uint8_t Size, const char *pString, uint8_t X, uint8_t
 	}
 }
 
+void UI_DisplaySmall(uint8_t Size, const char *pString, uint8_t X, uint8_t Y)
+{
+	uint8_t i;
+
+	for (i = 0; i < Size; i++) {
+		uint8_t Index = pString[i] - ' ';
+		memcpy(gFrameBuffer[Y] + (i * 7) + X, gFontSmall[Index], 7);
+	}
+}
+
+void DrawLine(uint8_t Column, uint8_t Line, uint16_t Size, const char *pString, bool bIsNumber)
+{
+	uint8_t i,Index;
+	uint16_t byte_size = 0;
+	uint8_t *pbuffer;
+
+	pbuffer = gFrameBuffer[Line] + Column;
+
+	for (i = 0; i < Size; i++) {
+		if (!bIsNumber)
+			Index = pString[i] - ' '; // for character
+		else
+			Index = pString[i] + '0' - ' '; // for real number:  1234...
+		memcpy(pbuffer + (i * 7), gFontSmall[Index], 7);
+		byte_size += 7;
+	}
+	ST7565_DrawLine(Column, Line+1, byte_size, pbuffer, false);
+}

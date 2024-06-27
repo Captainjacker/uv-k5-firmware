@@ -80,7 +80,7 @@ void ST7565_BlitStatusLine(void)
 	uint8_t i;
 
 	SPI_ToggleMasterMode(&SPI0->CR, false);
-	ST7565_WriteByte(0x40);
+	ST7565_WriteByte(0x40); // Display start line set
 	ST7565_SelectColumnAndLine(4, 0);
 	GPIO_SetBit(&GPIOB->DATA, GPIOB_PIN_ST7565_A0);
 

@@ -18,6 +18,6 @@
 #define UI_FM_H
 
 void UI_DisplayFM(void);
-
+void UI_RSSI_FM(void);
 #endif
 

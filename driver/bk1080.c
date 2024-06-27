@@ -37,6 +37,7 @@ static bool gIsInitBK1080;
 
 uint16_t BK1080_BaseFrequency;
 uint16_t BK1080_FrequencyDeviation;
+uint8_t BK1080_RSSI;
 
 void BK1080_Init(uint16_t Frequency, bool bEnable)
 {
@@ -109,5 +110,10 @@ void BK1080_GetFrequencyDeviation(uint16_t Frequency)
 {
 	BK1080_BaseFrequency = Frequency;
 	BK1080_FrequencyDeviation = BK1080_ReadRegister(BK1080_REG_07) / 16;
+}
+
+uint8_t BK1080_GetRSSI()
+{
+	return (uint8_t)(BK1080_ReadRegister(BK1080_REG_10) & 0xFF);
 }
 

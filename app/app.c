@@ -60,6 +60,7 @@
 #include "ui/rssi.h"
 #include "ui/status.h"
 #include "ui/ui.h"
+#include "ui/fmradio.h"
 
 static void APP_ProcessKey(KEY_Code_t Key, bool bKeyPressed, bool bKeyHeld);
 
@@ -1190,6 +1191,8 @@ void APP_TimeSlice500ms(void)
 			}
 		}
 	}
+	if (gScreenToDisplay == DISPLAY_FM)
+		UI_RSSI_FM(); // test
 #endif
 
 	if (gLowBattery) {
