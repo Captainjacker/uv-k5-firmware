@@ -1,3 +1,43 @@
+
+
+# 增加FM收音机 RSSI显示功能
+
+LCD屏幕相关:
+分辨率128*64
+一共可以显示8行, 小字体占用一行, 大字体/字符占用两行
+
+uint8_t gStatusLine[128];
+第一行固定显示状态栏
+uint8_t gFrameBuffer[7][128];
+显示缓存定义了7组, 实际应该是从第二行开始显示
+
+大字符 16*8, 占2行, 调用接口: UI_PrintString
+小数字 7*8, 占1行, 调用接口: UI_DisplaySmallDigits
+大数字 26*8, 占2行, 调用接口: UI_DisplayFrequency
+新增:
+大字符 7*8, 占1行, 调用接口: UI_DisplaySmall
+
+以上这些都是将显示数据填充到gFrameBuffer中, 
+接着需要调用ST7565_BlitFullScreen()将gFrameBuffer数据推到驱动芯片上, 流程太长
+
+使用ST7565_DrawLine可以只修改局部数据, 更新画面流程最短
+
+显示代码调用流程如下:
+APP_TimeSlice10ms() 轮询, 周期10ms
+	UI_DisplayStatus();
+	GUI_DisplayScreen() 10ms判断一次是否要运行, 如果gUpdateDisplay标志在其他地方置位, 立即刷新屏幕
+		UI_DisplayMain()
+		UI_DisplayFM() 刷新一次FM界面所有数据
+		UI_DisplayMenu()
+		UI_DisplayScanner()
+		UI_DisplayAircopy()
+
+整个屏幕刷新, 会导致噪音
+
+使用ST7565_DrawLine局部刷新, 实测依然有噪音(好像稍微好一点)
+
+
+
 # Open reimplementation of the Quan Sheng UV K5 v2.1.27 firmware
 
 This repository is a preservation project of the UV K5 v2.1.27 firmware.
@@ -11,7 +51,7 @@ This branch will also accumulate fixes/improvements from newer releases by QS (f
 For improved/better firmware and new features, you can find the following repositories by other collaborators:
 
 * https://github.com/fagci/uv-k5-firmware-fagci-mod
-* https://github.com/OneOfEleven/uv-k5-firmware-custom
+* https://github.com/OneOfEleven/uv-k5-firmware-cust11om
 * https://github.com/Tunas1337/uv-k5-firmware (Check the branches)
 * https://github.com/rebezhir/openquack for Russian users
 
@@ -72,7 +112,7 @@ you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
     http://www.apache.org/licenses/LICENSE-2.0
-
+    
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
